@@ -2,6 +2,8 @@
 permalink: /lab
 title: "CalgaryISH"
 author_profile: false
+redirect_from: 
+  - /lab/
 ---
 
 The Calgary Intelligent Systems and Hardware (CalgaryISH) research group was started in 2019. 
