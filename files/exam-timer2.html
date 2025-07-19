@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resizable Panels Example</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+    }
+    
+    /* Parent Panel Styles */
+    .parent-panel {
+      width: 98vw;
+      height: 98vh;
+      margin: 1vh auto;
+      background: #ffffff;
+      border-radius: 1rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .parent-header {
+      background: #2c3e50;
+      color: white;
+      padding: 1rem 2rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+      text-align: center;
+      border-bottom: 1px solid #34495e;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .header-time {
+      font-size: 1.2rem;
+      font-weight: normal;
+      min-width: 120px;
+      text-align: left;
+    }
+    
+    .header-title {
+      flex: 1;
+      text-align: center;
+    }
+    
+    .header-controls {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    
+    .header-controls button {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      border-radius: 0.4rem;
+      border: none;
+      background: #007bff;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: none;
+    }
+    
+    .header-controls button:hover {
+      background: #0056b3;
+    }
+    
+    .header-controls button#pauseBtnHeader.unpaused {
+      background: #007bff;
+      color: #fff;
+    }
+    
+    .header-controls button#pauseBtnHeader.paused {
+      background: #ffc107;
+      color: #222;
+    }
+    
+    .header-controls button#togglePanelBtn {
+      background: #6c757d;
+    }
+    
+    .header-controls button#togglePanelBtn:hover {
+      background: #5a6268;
+    }
+    
+    .panel-right.hidden {
+      display: none !important;
+    }
+    
+    .divider.hidden {
+      display: none !important;
+    }
+    
+    .parent-content {
+      flex: 1;
+      overflow: hidden;
+    }
+    
+    .split-container {
+      display: flex;
+      height: 100%;
+      width: 100%;
+    }
+    .panel {
+      height: 100%;
+      overflow: auto;
+      transition: background 0.2s;
+    }
+    .panel-left {
+      background: #eaf0fa;
+      min-width: 120px;
+      max-width: 90vw;
+      width: 30vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: background 0.3s;
+    }
+    #skipReadingBtn {
+      position: absolute;
+      bottom: 2vw;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 0.7em 2em;
+      font-size: 1.2em;
+      border-radius: 0.5em;
+      border: none;
+      background: #007bff;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      display: none;
+      z-index: 5;
+      transition: background 0.2s;
+    }
+    #skipReadingBtn:hover {
+      background: #0056b3;
+    }
+    #pauseResumeBtn {
+      position: absolute;
+      bottom: 7vw;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 0.7em 2em;
+      font-size: 1.2em;
+      border-radius: 0.5em;
+      border: none;
+      background: #007bff;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      display: none;
+      z-index: 5;
+      transition: background 0.2s;
+    }
+    #pauseResumeBtn:hover {
+      background: #0056b3;
+    }
+    .time-wrapper {
+      width: 80%;
+      height: 80%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #currentTime {
+      font-size: 6vw;
+      font-weight: bold;
+      width: 100%;
+      text-align: center;
+    }
+    .panel-right {
+      background: #fff;
+      flex: 1;
+      min-width: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2vw;
+      color: #222;
+    }
+    .assessment-form {
+      width: 700px;
+      max-width: 100vw;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2em;
+      background: #f8fafd;
+      padding: 2em 1.5em;
+      border-radius: 1em;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      font-size: clamp(1.2rem, 3vh, 2.5rem);
+    }
+    .assessment-form label {
+      font-size: 1em;
+      margin-bottom: 0.2em;
+    }
+    .assessment-form input[type="text"],
+    .assessment-form input[type="number"] {
+      width: 100%;
+      padding: 0.5em;
+      font-size: 1em;
+      border: 1px solid #b0b8c9;
+      border-radius: 0.4em;
+      margin-top: 0.2em;
+      box-sizing: border-box;
+      font-size: clamp(1.1rem, 2.5vh, 2rem);
+    }
+    .assessment-form input[type="checkbox"] {
+      margin-right: 0.5em;
+    }
+    .assessment-form-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+    .assessment-form .form-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+    }
+    .assessment-form .form-section input[type="number"] {
+      width: 5em;
+    }
+    .divider {
+      width: 8px;
+      background: #b0b8c9;
+      cursor: ew-resize;
+      position: relative;
+      z-index: 10;
+      transition: background 0.2s;
+    }
+    .divider:hover, .divider.dragging {
+      background: #6c7a99;
+    }
+    .form-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1em;
+      margin-top: 2em;
+    }
+    .form-buttons button {
+      font-size: 1em;
+      padding: 0.6em 1.5em;
+      border-radius: 0.4em;
+      border: none;
+      background: #007bff;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .form-buttons button:hover {
+      background: #0056b3;
+    }
+    @media (max-width: 600px) {
+      .panel-left, .panel-right { font-size: 5vw; }
+    }
+    /* Wall clock at top left after start */
+    #wallClockTopLeft {
+      min-width: 120px;
+      max-width: 220px;
+      width: 200px;
+      font-size: 2em;
+      font-weight: bold;
+      text-align: left;
+      color: #333;
+      background: none;
+      overflow: visible;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      pointer-events: none;
+      margin-left: 0.5em;
+      margin-top: 0.5em;
+      flex-shrink: 0;
+      padding-right: 1em;
+      z-index: 10;
+    }
+    @media (max-width: 600px) {
+      #wallClockTopLeft {
+        font-size: 18px;
+        max-width: 120px;
+      }
+    }
+    .panel-left {
+      position: relative;
+      overflow: visible;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #countdownWrapper {
+      width: 80%;
+      height: 80%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+    }
+    #countdownLabel {
+      font-size: 2.5vw;
+      margin-bottom: 1vw;
+      font-weight: bold;
+      text-align: center;
+      width: 100%;
+    }
+    #countdownTimer {
+      font-weight: bold;
+      width: 100%;
+      text-align: center;
+      letter-spacing: 0.1em;
+      min-height: 2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      word-break: break-all;
+      white-space: nowrap;
+      overflow: hidden;
+      /* font-size set dynamically by JS */
+    }
+
+    #formScaleContainer {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      min-height: 0;
+    }
+    #leftScaleContainer {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="parent-panel">
+    <div class="parent-header">
+      <div class="header-time" id="headerTime"></div>
+      <div class="header-title">Exam Timer</div>
+      <div class="header-controls">
+        <button id="pauseBtnHeader">Pause</button>
+        <button id="skipBtnHeader">Skip</button>
+        <button id="togglePanelBtn">Hide Panel</button>
+      </div>
+    </div>
+    <div class="parent-content">
+      <div class="split-container">
+        <div class="panel panel-left" id="panelLeft">
+          <div id="leftScaleContainer">
+            <div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;">
+            </div>
+          </div>
+        </div>
+        <div class="divider" id="divider"></div>
+        <div class="panel panel-right" id="panelRight">
+          <div id="rightPanelContent">
+            <div id="formScaleContainer"><form class="assessment-form" id="assessmentForm">
+              <div>
+                <label for="assessmentName">Assessment Name</label>
+                <input type="text" id="assessmentName" name="assessmentName" required tabindex="1">
+              </div>
+              <div class="assessment-form-row">
+                <input type="checkbox" id="enableReadingTime" checked tabindex="2">
+                <label for="enableReadingTime" style="margin: 0;">Enable Reading Time</label>
+              </div>
+              <div>
+                <label for="readingTime">Reading Time (minutes)</label>
+                <input type="number" id="readingTime" name="readingTime" min="0" step="1" required inputmode="numeric" pattern="[0-9]*" tabindex="3">
+              </div>
+              <div>
+                <label for="examTime">Exam Time (minutes)</label>
+                <input type="number" id="examTime" name="examTime" min="1" step="1" required inputmode="numeric" pattern="[0-9]*" tabindex="4">
+              </div>
+              <div class="form-section">
+                <div class="assessment-form-row">
+                  <input type="checkbox" id="enableDoNotLeaveBefore" tabindex="5">
+                  <label for="enableDoNotLeaveBefore" style="margin: 0;">Do not leave before</label>
+                  <input type="number" id="doNotLeaveBefore" name="doNotLeaveBefore" min="0" step="1" disabled inputmode="numeric" pattern="[0-9]*" tabindex="6">
+                  <span>minutes</span>
+                </div>
+                <div class="assessment-form-row">
+                  <input type="checkbox" id="enableDoNotLeaveAfter" tabindex="7">
+                  <label for="enableDoNotLeaveAfter" style="margin: 0;">Do not leave during the last</label>
+                  <input type="number" id="doNotLeaveAfter" name="doNotLeaveAfter" min="0" step="1" disabled inputmode="numeric" pattern="[0-9]*" tabindex="8">
+                  <span>minutes</span>
+                </div>
+              </div>
+              <div class="form-buttons">
+                <button type="button" id="startBtnForm" tabindex="9">Start</button>
+                <button type="button" id="clearBtnForm" tabindex="10">Clear</button>
+              </div>
+            </form></div>
+          </div>
+        </div>
+        <style>
+          #wallclockList {
+            width: 98%;
+            margin: 2em auto;
+            padding: 0;
+            list-style: none;
+            display: grid;
+            grid-gap: 0.5em;
+            --wallclock-cols: 3;
+            grid-template-columns: repeat(var(--wallclock-cols), 1fr);
+            max-width: 100%;
+          }
+          #wallclockList li {
+            font-size: var(--wallclock-font-size, 2vw);
+          }
+          #wallclockList li.reading {
+            background: #eaf0fa;
+            color: #2a3a5a;
+          }
+          #wallclockList li.exam {
+            background: #e0fbe0;
+            color: #225a22;
+          }
+          #wallclockList li {
+            margin-bottom: 0;
+          }
+        </style>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Wall clock update
+    function updateTime() {
+      const now = new Date();
+      const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      
+      // Update header time
+      const headerTimeElem = document.getElementById('headerTime');
+      if (headerTimeElem) {
+        headerTimeElem.textContent = timeString;
+      }
+      
+      // Update left panel current time
+      const currentTimeElem = document.getElementById('currentTime');
+      if (currentTimeElem) {
+        currentTimeElem.textContent = timeString;
+      } else {
+        // Create current time element if it doesn't exist
+        const leftScaleContainer = document.getElementById('leftScaleContainer');
+        if (leftScaleContainer) {
+          const timeWrapper = document.createElement('div');
+          timeWrapper.className = 'time-wrapper';
+          timeWrapper.id = 'currentTimeWrapper';
+          timeWrapper.style.width = '100%';
+          timeWrapper.style.height = '100%';
+          timeWrapper.style.display = 'flex';
+          timeWrapper.style.alignItems = 'center';
+          timeWrapper.style.justifyContent = 'flex-start';
+          timeWrapper.style.paddingTop = '1rem';
+          
+          const timeElem = document.createElement('div');
+          timeElem.id = 'currentTime';
+          timeElem.style.fontSize = '6vw';
+          timeElem.style.fontWeight = 'bold';
+          timeElem.style.textAlign = 'center';
+          timeElem.textContent = timeString;
+          
+          timeWrapper.appendChild(timeElem);
+          leftScaleContainer.appendChild(timeWrapper);
+        }
+      }
+      // (no wall clock in right panel)
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+    
+    // Initialize toggle panel button visibility
+    const toggleBtn = document.getElementById('togglePanelBtn');
+    if (toggleBtn) toggleBtn.style.display = 'inline-block';
+
+    // Resizable divider logic
+    const divider = document.getElementById('divider');
+    const panelLeft = document.getElementById('panelLeft');
+    let isDragging = false;
+
+    divider.addEventListener('mousedown', function(e) {
+      const rightPanel = document.getElementById('panelRight');
+      if (rightPanel.classList.contains('hidden')) return; // Don't allow dragging if right panel is hidden
+      
+      isDragging = true;
+      divider.classList.add('dragging');
+      document.body.style.cursor = 'ew-resize';
+    });
+
+    document.addEventListener('mousemove', function(e) {
+      if (!isDragging) return;
+      const rightPanel = document.getElementById('panelRight');
+      if (rightPanel.classList.contains('hidden')) return; // Don't drag if right panel is hidden
+      
+      const minWidth = 120;
+      const maxWidth = window.innerWidth - minWidth - 8; // 8px divider
+      let newWidth = e.clientX;
+      if (newWidth < minWidth) newWidth = minWidth;
+      if (newWidth > maxWidth) newWidth = maxWidth;
+      panelLeft.style.width = newWidth + 'px';
+    });
+
+    document.addEventListener('mouseup', function(e) {
+      if (isDragging) {
+        isDragging = false;
+        divider.classList.remove('dragging');
+        document.body.style.cursor = '';
+      }
+    });
+
+    // Enable/disable reading time field
+    const enableReadingTime = document.getElementById('enableReadingTime');
+    const readingTime = document.getElementById('readingTime');
+    enableReadingTime.addEventListener('change', function() {
+      readingTime.disabled = !enableReadingTime.checked;
+    });
+    readingTime.disabled = !enableReadingTime.checked;
+
+    // Enable/disable do not leave before/after fields
+    const enableDoNotLeaveBefore = document.getElementById('enableDoNotLeaveBefore');
+    const doNotLeaveBefore = document.getElementById('doNotLeaveBefore');
+    enableDoNotLeaveBefore.addEventListener('change', function() {
+      doNotLeaveBefore.disabled = !enableDoNotLeaveBefore.checked;
+    });
+    doNotLeaveBefore.disabled = !enableDoNotLeaveBefore.checked;
+
+    const enableDoNotLeaveAfter = document.getElementById('enableDoNotLeaveAfter');
+    const doNotLeaveAfter = document.getElementById('doNotLeaveAfter');
+    enableDoNotLeaveAfter.addEventListener('change', function() {
+      doNotLeaveAfter.disabled = !enableDoNotLeaveAfter.checked;
+    });
+    doNotLeaveAfter.disabled = !enableDoNotLeaveAfter.checked;
+
+    // Clear button logic
+    document.getElementById('clearBtnForm').addEventListener('click', function() {
+      const form = document.querySelector('.assessment-form');
+      form.reset();
+      // Manually trigger disables for controlled fields
+      readingTime.disabled = !enableReadingTime.checked;
+      doNotLeaveBefore.disabled = !enableDoNotLeaveBefore.checked;
+      doNotLeaveAfter.disabled = !enableDoNotLeaveAfter.checked;
+      hideCountdown();
+      if (timerInterval) clearInterval(timerInterval);
+      // Reset header title to "Exam Timer"
+      const headerTitle = document.querySelector('.header-title');
+      if (headerTitle) {
+        headerTitle.textContent = 'Exam Timer';
+      }
+    });
+
+    // Prevent 'e' and non-digit input in number fields
+    function blockNonDigits(e) {
+      // Allow: Backspace, Delete, Tab, Escape, Enter, arrows, Home/End
+      if (
+        [
+          'Backspace', 'Delete', 'Tab', 'Escape', 'Enter',
+          'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown',
+          'Home', 'End'
+        ].includes(e.key)
+      ) {
+        return;
+      }
+      // Block: e, E, +, -
+      if (e.key === 'e' || e.key === 'E' || e.key === '+' || e.key === '-') {
+        e.preventDefault();
+        return;
+      }
+      // Allow digits
+      if (/^[0-9]$/.test(e.key)) {
+        return;
+      }
+      // Block everything else
+      e.preventDefault();
+    }
+    [
+      document.getElementById('readingTime'),
+      document.getElementById('examTime'),
+      document.getElementById('doNotLeaveBefore'),
+      document.getElementById('doNotLeaveAfter')
+    ].forEach(function(input) {
+      input.addEventListener('keydown', blockNonDigits);
+    });
+
+    // --- Reading/Exam Timer Logic ---
+    let timerInterval = null;
+    let countdownSeconds = 0;
+    let phase = null; // 'reading' or 'exam'
+    function formatCountdown(secs) {
+      const h = Math.floor(secs / 3600).toString().padStart(2, '0');
+      const m = Math.floor((secs % 3600) / 60).toString().padStart(2, '0');
+      const s = (secs % 60).toString().padStart(2, '0');
+      return `${h}:${m}:${s}`;
+    }
+    function formatWallClockNoSeconds(date) {
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+    let isPaused = false;
+    function showCountdown(seconds, label) {
+      // Ensure countdownWrapper exists and is visible
+      let countdownWrapper = document.getElementById('countdownWrapper');
+      if (!countdownWrapper) {
+        // Try to create it inside leftScaleContainer
+        const leftScaleContainer = document.getElementById('leftScaleContainer');
+        if (leftScaleContainer) {
+          countdownWrapper = document.createElement('div');
+          countdownWrapper.className = 'time-wrapper';
+          countdownWrapper.id = 'countdownWrapper';
+          countdownWrapper.style.width = '100%';
+          countdownWrapper.style.height = '100%';
+          countdownWrapper.style.display = 'flex';
+          countdownWrapper.style.flexDirection = 'column';
+          countdownWrapper.style.alignItems = 'center';
+          countdownWrapper.style.justifyContent = 'flex-start';
+          countdownWrapper.style.paddingTop = '1rem';
+          leftScaleContainer.appendChild(countdownWrapper);
+        } else {
+          return;
+        }
+      }
+      countdownWrapper.style.display = 'flex';
+      // Hide current time wrapper
+      const currentTimeWrapper = document.getElementById('currentTimeWrapper');
+      if (currentTimeWrapper) currentTimeWrapper.style.display = 'none';
+      // Timer span
+      let countdownTimer = document.getElementById('countdownTimer');
+      if (!countdownTimer) {
+        countdownTimer = document.createElement('span');
+        countdownTimer.id = 'countdownTimer';
+        countdownWrapper.appendChild(countdownTimer);
+      }
+      countdownTimer.style.display = 'block';
+      countdownTimer.textContent = formatCountdown(seconds);
+      scaleCountdownFont();
+      // Show phase label above timer
+      let labelElem = document.getElementById('countdownLabel');
+      if (!labelElem) {
+        labelElem = document.createElement('div');
+        labelElem.id = 'countdownLabel';
+        countdownWrapper.insertBefore(labelElem, countdownTimer);
+      }
+      labelElem.style.display = label ? 'block' : 'none';
+      labelElem.textContent = label || '';
+      // Show header buttons during reading or exam time
+      const pauseBtn = document.getElementById('pauseBtnHeader');
+      const skipBtn = document.getElementById('skipBtnHeader');
+      const toggleBtn = document.getElementById('togglePanelBtn');
+      
+      // Always show the toggle panel button
+      if (toggleBtn) toggleBtn.style.display = 'inline-block';
+      
+      if (phase === 'reading' || phase === 'exam') {
+        pauseBtn.style.display = 'inline-block';
+        skipBtn.style.display = 'inline-block';
+        // Set pause button state
+        pauseBtn.textContent = isPaused ? 'Unpause' : 'Pause';
+        pauseBtn.className = isPaused ? 'paused' : 'unpaused';
+        // Set skip button text
+        skipBtn.textContent = phase === 'reading' ? 'Skip' : 'Skip';
+      } else {
+        pauseBtn.style.display = 'none';
+        skipBtn.style.display = 'none';
+      }
+      hideExamFinished();
+    }
+    function hideCountdown() {
+      // Show current time wrapper
+      const currentTimeWrapper = document.getElementById('currentTimeWrapper');
+      if (currentTimeWrapper) currentTimeWrapper.style.display = 'flex';
+      // (no wall clock in right panel)
+      let countdownTimer = document.getElementById('countdownTimer');
+      if (countdownTimer) countdownTimer.style.display = 'none';
+      let labelElem = document.getElementById('countdownLabel');
+      if (labelElem) labelElem.style.display = 'none';
+      // Hide header buttons (but keep toggle panel button visible)
+      const pauseBtn = document.getElementById('pauseBtnHeader');
+      const skipBtn = document.getElementById('skipBtnHeader');
+      const toggleBtn = document.getElementById('togglePanelBtn');
+      if (pauseBtn) pauseBtn.style.display = 'none';
+      if (skipBtn) skipBtn.style.display = 'none';
+      if (toggleBtn) toggleBtn.style.display = 'inline-block';
+      document.getElementById('panelLeft').style.background = '#eaf0fa';
+      hideExamFinished();
+    }
+    function showExamFinished() {
+      hideCountdown();
+      const countdownWrapper = document.getElementById('countdownWrapper');
+      let finishedElem = document.getElementById('examFinishedMsg');
+      if (!finishedElem) {
+        finishedElem = document.createElement('div');
+        finishedElem.id = 'examFinishedMsg';
+        finishedElem.style.fontSize = '3vw';
+        finishedElem.style.fontWeight = 'bold';
+        finishedElem.style.textAlign = 'center';
+        finishedElem.style.color = '#333';
+        countdownWrapper.appendChild(finishedElem);
+      }
+      finishedElem.textContent = 'Exam Finished';
+      finishedElem.style.display = 'block';
+      // Add reset button
+      let resetBtn = document.getElementById('resetExamBtn');
+      if (!resetBtn) {
+        resetBtn = document.createElement('button');
+        resetBtn.id = 'resetExamBtn';
+        resetBtn.textContent = 'Reset';
+        resetBtn.style.display = 'block';
+        resetBtn.style.margin = '2em auto 0 auto';
+        resetBtn.style.fontSize = '1.2em';
+        resetBtn.style.padding = '0.7em 2em';
+        resetBtn.style.borderRadius = '0.5em';
+        resetBtn.style.border = 'none';
+        resetBtn.style.background = '#007bff';
+        resetBtn.style.color = '#fff';
+        resetBtn.style.cursor = 'pointer';
+        resetBtn.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
+        resetBtn.addEventListener('click', resetToConfigForm);
+        countdownWrapper.appendChild(resetBtn);
+      } else {
+        resetBtn.style.display = 'block';
+      }
+    }
+    function hideExamFinished() {
+      const finishedElem = document.getElementById('examFinishedMsg');
+      if (finishedElem) finishedElem.style.display = 'none';
+    }
+    function startReadingPhase(readingSeconds, examSeconds) {
+      phase = 'reading';
+      countdownSeconds = readingSeconds;
+      isPaused = false;
+      showCountdown(countdownSeconds, 'Reading Time');
+      document.getElementById('panelLeft').style.background = '#eaf0fa';
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (!isPaused) {
+          countdownSeconds--;
+          showCountdown(countdownSeconds, 'Reading Time');
+          if (countdownSeconds <= 0) {
+            clearInterval(timerInterval);
+            if (examSeconds > 0) {
+              startExamPhase(examSeconds);
+            } else {
+              showExamFinished();
+            }
+          }
+        }
+      }, 1000);
+    }
+    function startExamPhase(examSeconds) {
+      phase = 'exam';
+      countdownSeconds = examSeconds;
+      isPaused = false;
+      showCountdown(countdownSeconds, 'Exam Time');
+      document.getElementById('panelLeft').style.background = '#e0fbe0';
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (!isPaused) {
+          countdownSeconds--;
+          showCountdown(countdownSeconds, 'Exam Time');
+          if (countdownSeconds <= 0) {
+            clearInterval(timerInterval);
+            showExamFinished();
+          }
+        }
+      }, 1000);
+    }
+    // skipReadingBtn logic removed (button no longer exists)
+
+    // Wall clock for top left (no seconds)
+    // (no wall clock in right panel)
+
+    let globalReadingMins = 0;
+    let globalExamMins = 0;
+    let lastWallclockParams = null;
+    // Start button logic
+    document.getElementById('startBtnForm').addEventListener('click', function() {
+      // Get assessment name and times
+      const assessmentName = document.getElementById('assessmentName').value.trim();
+      const readingEnabled = document.getElementById('enableReadingTime').checked;
+      const readingTime = parseInt(document.getElementById('readingTime').value, 10) || 0;
+      const examTime = parseInt(document.getElementById('examTime').value, 10) || 0;
+      
+      // Get "do not leave" settings
+      const enableDoNotLeaveBefore = document.getElementById('enableDoNotLeaveBefore').checked;
+      const doNotLeaveBefore = parseInt(document.getElementById('doNotLeaveBefore').value, 10) || 0;
+      const enableDoNotLeaveAfter = document.getElementById('enableDoNotLeaveAfter').checked;
+      const doNotLeaveAfter = parseInt(document.getElementById('doNotLeaveAfter').value, 10) || 0;
+      
+      // Guard: assessment name must be provided
+      if (!assessmentName) {
+        alert('Please enter an assessment name.');
+        document.getElementById('assessmentName').focus();
+        return;
+      }
+      
+      // Guard: exam time must be non-zero
+      if (!examTime || examTime <= 0) {
+        alert('Please enter a non-zero exam time.');
+        document.getElementById('examTime').focus();
+        return;
+      }
+      
+      // Update header title with assessment name
+      const headerTitle = document.querySelector('.header-title');
+      if (headerTitle) {
+        headerTitle.textContent = assessmentName;
+      }
+      
+      globalReadingMins = (readingEnabled && readingTime > 0) ? readingTime : 0;
+      globalExamMins = (examTime > 0) ? examTime : 0;
+      if (timerInterval) clearInterval(timerInterval);
+      isPaused = false;
+      // Show wallclock increments in right panel
+      showWallclockIncrements(readingEnabled, readingTime, examTime, false, null, enableDoNotLeaveBefore, doNotLeaveBefore, enableDoNotLeaveAfter, doNotLeaveAfter);
+      if (readingEnabled && readingTime > 0) {
+        startReadingPhase(readingTime * 60, examTime * 60);
+      } else if (examTime > 0) {
+        startExamPhase(examTime * 60);
+      }
+    });
+
+    // Global state for wall clock increments and skip
+    let globalReadingIncrements = [];
+    let globalExamIncrements = [];
+    let globalReadingSkipped = false;
+    let globalExamStartTime = null;
+
+    function showWallclockIncrements(readingEnabled, readingTime, examTime, readingSkipped = false, examStartOverride = null, enableDoNotLeaveBefore = false, doNotLeaveBefore = 0, enableDoNotLeaveAfter = false, doNotLeaveAfter = 0) {
+      lastWallclockParams = { readingEnabled, readingTime, examTime, readingSkipped, examStartOverride, enableDoNotLeaveBefore, doNotLeaveBefore, enableDoNotLeaveAfter, doNotLeaveAfter };
+      const rightPanelContent = document.getElementById('rightPanelContent');
+      const now = new Date();
+      let readingMins = readingEnabled && readingTime > 0 ? readingTime : 0;
+      let examMins = examTime > 0 ? examTime : 0;
+      // Build reading increments (5 min)
+      let readingIncrements = [];
+      let readingStart = new Date(now);
+      let examStart = examStartOverride ? new Date(examStartOverride) : new Date(now.getTime() + readingMins * 60000);
+      if (readingSkipped) {
+        readingStart = new Date(now.getTime() - readingMins * 60000); // fake reading increments in the past
+        examStart = new Date(now);
+      }
+      if (readingMins > 0) {
+        let mins = 0;
+        while (mins < readingMins) {
+          let t = new Date(readingStart.getTime() + mins * 60000);
+          readingIncrements.push({ time: t, phase: 'reading', idx: mins/5 });
+          mins += 5;
+        }
+        if (readingMins % 5 !== 0 || readingIncrements.length === 0 || readingIncrements[readingIncrements.length-1].time.getTime() !== examStart.getTime()) {
+          readingIncrements.push({ time: examStart, phase: 'reading', idx: readingIncrements.length });
+        }
+      }
+      // Build exam increments (15 min) with "do not leave" markers
+      let examIncrements = [];
+      if (examMins > 0) {
+        let mins = 0;
+        while (mins < examMins) {
+          let t = new Date(examStart.getTime() + mins * 60000);
+          examIncrements.push({ time: t, phase: 'exam', idx: mins/15 });
+          mins += 15;
+        }
+        let examEnd = new Date(examStart.getTime() + examMins * 60000);
+        if (examMins % 15 !== 0 || examIncrements.length === 0 || examIncrements[examIncrements.length-1].time.getTime() !== examEnd.getTime()) {
+          examIncrements.push({ time: examEnd, phase: 'exam', idx: examIncrements.length });
+        }
+        
+        // Add "do not leave before" marker if enabled
+        if (enableDoNotLeaveBefore && doNotLeaveBefore > 0) {
+          let leaveBeforeTime = new Date(examStart.getTime() + doNotLeaveBefore * 60000);
+          let existingIndex = examIncrements.findIndex(inc => Math.abs(inc.time.getTime() - leaveBeforeTime.getTime()) < 60000); // Within 1 minute
+          if (existingIndex !== -1) {
+            // Replace existing increment with special marker
+            examIncrements[existingIndex] = { 
+              time: leaveBeforeTime, 
+              phase: 'exam', 
+              idx: existingIndex,
+              special: 'leave-before'
+            };
+          } else {
+            // Add as new marker if no overlap
+            let insertIndex = examIncrements.findIndex(inc => inc.time > leaveBeforeTime);
+            if (insertIndex === -1) insertIndex = examIncrements.length;
+            examIncrements.splice(insertIndex, 0, { 
+              time: leaveBeforeTime, 
+              phase: 'exam', 
+              idx: insertIndex,
+              special: 'leave-before'
+            });
+          }
+        }
+        
+        // Add "do not leave after" marker if enabled
+        if (enableDoNotLeaveAfter && doNotLeaveAfter > 0) {
+          let leaveAfterTime = new Date(examEnd.getTime() - doNotLeaveAfter * 60000);
+          let existingIndex = examIncrements.findIndex(inc => Math.abs(inc.time.getTime() - leaveAfterTime.getTime()) < 60000); // Within 1 minute
+          if (existingIndex !== -1) {
+            // Replace existing increment with special marker
+            examIncrements[existingIndex] = { 
+              time: leaveAfterTime, 
+              phase: 'exam', 
+              idx: existingIndex,
+              special: 'leave-after'
+            };
+          } else {
+            // Add as new marker if no overlap
+            let insertIndex = examIncrements.findIndex(inc => inc.time > leaveAfterTime);
+            if (insertIndex === -1) insertIndex = examIncrements.length;
+            examIncrements.splice(insertIndex, 0, { 
+              time: leaveAfterTime, 
+              phase: 'exam', 
+              idx: insertIndex,
+              special: 'leave-after'
+            });
+          }
+        }
+      }
+      // Save to global for timer tick
+      globalReadingIncrements = readingIncrements;
+      globalExamIncrements = examIncrements;
+      globalReadingSkipped = readingSkipped;
+      globalExamStartTime = examStart;
+
+      // --- Stable column calculation ---
+      const panel = document.getElementById('panelRight');
+      const panelHeight = panel ? panel.offsetHeight : 600;
+      const minRowHeight = 48; // px
+      const minFontSize = 12;
+      const maxFontSize = 48;
+      let nExamCols = 1;
+      let examRowsPerCol = 1;
+      let tallestCol = 1;
+      let fontSize = 24;
+
+      if (readingMins > 0) {
+        // Always at least two columns: reading (all in one), exam (split as needed)
+        let maxRows = Math.floor(panelHeight / minRowHeight);
+        if (maxRows < 1) maxRows = 1;
+        nExamCols = Math.ceil(examIncrements.length / maxRows);
+        if (nExamCols < 1) nExamCols = 1;
+        if (examIncrements.length === 0) nExamCols = 1;
+        examRowsPerCol = Math.ceil(examIncrements.length / nExamCols);
+        tallestCol = Math.max(readingIncrements.length, examRowsPerCol);
+      } else {
+        let totalItems = examIncrements.length;
+        let maxRows = Math.floor(panelHeight / minRowHeight);
+        if (maxRows < 1) maxRows = 1;
+        nExamCols = Math.ceil(totalItems / maxRows);
+        if (nExamCols < 1) nExamCols = 1;
+        if (nExamCols > totalItems) nExamCols = totalItems;
+        examRowsPerCol = Math.ceil(totalItems / nExamCols);
+        tallestCol = examRowsPerCol;
+      }
+
+      // Build grid HTML with fixed column count
+      let nTotalCols = readingMins > 0 ? 1 + nExamCols : nExamCols;
+      let gridHtml = `<div id="wallclockGrid" style="display: grid; grid-template-columns: repeat(${nTotalCols}, 1fr); gap: 0.5em; width: 100%; height: 100%;">`;
+      // Add headers row
+      gridHtml += '<div style="display:contents;">';
+      if (readingMins > 0) {
+        gridHtml += '<div class="wallclockColHeader" style="text-align:center;font-weight:bold;font-size:1.1em;margin-bottom:0.3em;">Reading Time</div>';
+      }
+      for (let c = 0; c < nExamCols; c++) {
+        if (c === 0) {
+          gridHtml += '<div class="wallclockColHeader" style="text-align:center;font-weight:bold;font-size:1.1em;margin-bottom:0.3em;">Exam Time</div>';
+        } else {
+          gridHtml += '<div class="wallclockColHeader" style="text-align:center;font-weight:bold;font-size:1.1em;margin-bottom:0.3em;"></div>';
+        }
+      }
+      gridHtml += '</div>';
+      // Reading column (if any)
+      if (readingMins > 0) {
+        gridHtml += '<ul class="wallclockCol" style="list-style:none; padding:0; margin:0;">';
+        readingIncrements.forEach((inc, idx) => {
+          const timeStr = inc.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+          let style = `background:#eaf0fa;color:#2a3a5a;`;
+          if (idx === 0) style += 'font-weight:bold;';
+          if (idx === readingIncrements.length-1) style += 'background:#b0b8c9;color:#fff;';
+          let strike = (readingSkipped || inc.time <= new Date()) ? 'text-decoration: line-through; opacity: 0.6;' : '';
+          gridHtml += `<li class="reading" data-phase="reading" data-idx="${idx}" style="${style}${strike}">${idx === 0 ? 'Start: ' : idx === readingIncrements.length-1 ? 'End: ' : ''}${timeStr}</li>`;
+        });
+        gridHtml += '</ul>';
+      }
+      // Exam columns
+      if (examIncrements.length > 0) {
+        for (let c = 0; c < nExamCols; c++) {
+          gridHtml += '<ul class="wallclockCol" style="list-style:none; padding:0; margin:0;">';
+          let start = c * examRowsPerCol;
+          let end = Math.min((c + 1) * examRowsPerCol, examIncrements.length);
+          for (let i = start; i < end; i++) {
+            const inc = examIncrements[i];
+            const timeStr = inc.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+            let style = `background:#e0fbe0;color:#225a22;`;
+            if (i === 0) style += 'font-weight:bold;';
+            if (i === examIncrements.length-1) style += 'background:#b0b8c9;color:#fff;';
+            
+            // Special styling for "do not leave" markers
+            if (inc.special === 'leave-before') {
+              style = `background:#fff3cd;color:#856404;border:2px solid #ffc107;`;
+            } else if (inc.special === 'leave-after') {
+              style = `background:#f8d7da;color:#721c24;border:2px solid #dc3545;`;
+            }
+            
+            let strike = (inc.time <= new Date()) ? 'text-decoration: line-through; opacity: 0.6;' : '';
+            
+            // Determine display text
+            let displayText = '';
+            if (i === 0) displayText = 'Start: ';
+            else if (i === examIncrements.length-1) displayText = 'End: ';
+            else if (inc.special === 'leave-before') displayText = '(you may leave at) ';
+            else if (inc.special === 'leave-after') displayText = '(you may not leave) ';
+            
+            gridHtml += `<li class="exam" data-phase="exam" data-idx="${i}" style="${style}${strike}">${displayText}${timeStr}</li>`;
+          }
+          gridHtml += '</ul>';
+        }
+      }
+      gridHtml += '</div>';
+
+      // Fixed design size for grid outer
+      const designWidth = 700;
+      const designHeight = 500;
+      const panelWidth = panel ? panel.offsetWidth : designWidth;
+      let scale = Math.min(panelWidth * 0.95 / designWidth, 1);
+      let scaleContainerStyle = `width:100%;height:100%;display:flex;justify-content:center;align-items:center;`;
+      let gridOuterStyle = `width:${designWidth}px;height:${designHeight}px;transform:scale(${scale});transform-origin:top center;`;
+
+      rightPanelContent.innerHTML = `<div id="wallclockScaleContainer" style="${scaleContainerStyle}"><div id="wallclockGridOuter" style="${gridOuterStyle}">${gridHtml}</div></div>`;
+
+      setTimeout(() => {
+        const grid = document.getElementById('wallclockGrid');
+        if (!grid) return;
+        const cols = grid.querySelectorAll('.wallclockCol');
+        cols.forEach(col => {
+          const colWidth = col.offsetWidth;
+          let fontSize = Math.max(minFontSize, Math.min(Math.floor(colWidth * 0.25), maxFontSize));
+          col.querySelectorAll('li').forEach(li => {
+            li.style.fontSize = fontSize + 'px';
+          });
+        });
+      }, 0);
+    }
+
+    function scaleWallclockGridFont() {
+      const grid = document.getElementById('wallclockGrid');
+      if (!grid) return;
+      const cols = grid.querySelectorAll('.wallclockCol');
+      cols.forEach(col => {
+        const colWidth = col.offsetWidth;
+        let fontSize = Math.max(12, Math.min(Math.floor(colWidth * 0.25), 48));
+        col.querySelectorAll('li').forEach(li => {
+          li.style.fontSize = fontSize + 'px';
+        });
+      });
+    }
+    // Re-render wallclock increments on window resize or panel resize if visible
+    function rerenderWallclockListIfVisible() {
+      if (lastWallclockParams) {
+        window.requestAnimationFrame(() => {
+          showWallclockIncrements(
+            lastWallclockParams.readingEnabled,
+            lastWallclockParams.readingTime,
+            lastWallclockParams.examTime,
+            lastWallclockParams.readingSkipped,
+            lastWallclockParams.examStartOverride,
+            lastWallclockParams.enableDoNotLeaveBefore,
+            lastWallclockParams.doNotLeaveBefore,
+            lastWallclockParams.enableDoNotLeaveAfter,
+            lastWallclockParams.doNotLeaveAfter
+          );
+          setTimeout(scaleWallclockGridFont, 0);
+        });
+      }
+    }
+    window.addEventListener('resize', rerenderWallclockListIfVisible);
+    // Use ResizeObserver for right panel
+    if (window.ResizeObserver) {
+      const panelRight = document.getElementById('panelRight');
+      const ro = new ResizeObserver(() => rerenderWallclockListIfVisible());
+      ro.observe(panelRight);
+    }
+
+    // Dynamically scale timer font-size to panel width
+    function scaleCountdownFont() {
+      const panel = document.getElementById('panelLeft');
+      const timer = document.getElementById('countdownTimer');
+      if (panel && timer) {
+        const panelWidth = panel.offsetWidth;
+        // 15.6% of panel width (30% bigger than 12%), clamp for min/max
+        let size = Math.max(24, Math.min(panelWidth * 0.156, 156));
+        timer.style.fontSize = size + 'px';
+      }
+    }
+    // Also scale timer font on window resize and after divider drag
+    window.addEventListener('resize', scaleCountdownFont);
+    // After divider drag
+    let lastPanelWidth = null;
+    setInterval(() => {
+      const panel = document.getElementById('panelLeft');
+      if (panel) {
+        if (panel.offsetWidth !== lastPanelWidth) {
+          lastPanelWidth = panel.offsetWidth;
+          scaleCountdownFont();
+        }
+      }
+    }, 200);
+
+    // Pause/Unpause button logic
+    document.getElementById('pauseBtnHeader').addEventListener('click', function() {
+      isPaused = !isPaused;
+      this.textContent = isPaused ? 'Unpause' : 'Pause';
+      this.className = isPaused ? 'paused' : 'unpaused';
+      // Recalculate and re-render wall clock increments on pause/unpause
+      if (lastWallclockParams) {
+        showWallclockIncrements(
+          lastWallclockParams.readingEnabled,
+          lastWallclockParams.readingTime,
+          lastWallclockParams.examTime,
+          lastWallclockParams.readingSkipped,
+          lastWallclockParams.examStartOverride,
+          lastWallclockParams.enableDoNotLeaveBefore,
+          lastWallclockParams.doNotLeaveBefore,
+          lastWallclockParams.enableDoNotLeaveAfter,
+          lastWallclockParams.doNotLeaveAfter
+        );
+      }
+    });
+
+    // Update strikeout for elapsed increments
+    function updateWallclockStrikeouts() {
+      const now = new Date();
+      // Reading
+      globalReadingIncrements.forEach((inc, idx) => {
+        const li = document.querySelector(`li.reading[data-idx="${idx}"]`);
+        if (li && (globalReadingSkipped || inc.time <= now)) {
+          li.style.textDecoration = 'line-through';
+          li.style.opacity = '0.6';
+        }
+      });
+      // Exam
+      globalExamIncrements.forEach((inc, idx) => {
+        const li = document.querySelector(`li.exam[data-idx="${idx}"]`);
+        if (li && inc.time <= now) {
+          li.style.textDecoration = 'line-through';
+          li.style.opacity = '0.6';
+        }
+      });
+    }
+    setInterval(updateWallclockStrikeouts, 1000);
+
+    // Update skipPhase to recalc wallclock and strikeout reading
+    function skipPhase() {
+      if (timerInterval) clearInterval(timerInterval);
+      isPaused = false;
+      if (phase === 'reading') {
+        // Mark reading as skipped, set new exam start time, recalc wallclock
+        globalReadingSkipped = true;
+        globalExamStartTime = new Date();
+        showWallclockIncrements(true, globalReadingMins, globalExamMins, true, globalExamStartTime, lastWallclockParams.enableDoNotLeaveBefore, lastWallclockParams.doNotLeaveBefore, lastWallclockParams.enableDoNotLeaveAfter, lastWallclockParams.doNotLeaveAfter);
+        if (globalExamMins > 0) {
+          phase = 'exam';
+          countdownSeconds = globalExamMins * 60;
+          showCountdown(countdownSeconds, 'Exam Time');
+          document.getElementById('panelLeft').style.background = '#e0fbe0';
+          timerInterval = setInterval(() => {
+            if (!isPaused) {
+              countdownSeconds--;
+              showCountdown(countdownSeconds, 'Exam Time');
+              if (countdownSeconds <= 0) {
+                clearInterval(timerInterval);
+                phase = null;
+                showExamFinished();
+              }
+            }
+          }, 1000);
+        } else {
+          phase = null;
+          showExamFinished();
+        }
+      } else if (phase === 'exam') {
+        phase = null;
+        showExamFinished();
+      }
+    }
+    document.getElementById('skipBtnHeader').addEventListener('click', skipPhase);
+
+    // Panel toggle functionality
+    document.getElementById('togglePanelBtn').addEventListener('click', function() {
+      const rightPanel = document.getElementById('panelRight');
+      const divider = document.getElementById('divider');
+      const leftPanel = document.getElementById('panelLeft');
+      const toggleBtn = this;
+      
+      if (rightPanel.classList.contains('hidden')) {
+        // Show panel
+        rightPanel.classList.remove('hidden');
+        divider.classList.remove('hidden');
+        toggleBtn.textContent = 'Hide Panel';
+        // Restore left panel width to original or reasonable default
+        leftPanel.style.width = '30vw';
+      } else {
+        // Hide panel
+        rightPanel.classList.add('hidden');
+        divider.classList.add('hidden');
+        toggleBtn.textContent = 'Show Panel';
+        // Expand left panel to full width
+        leftPanel.style.width = '100%';
+      }
+      
+      // Trigger resize events to update scaling
+      setTimeout(() => {
+        window.dispatchEvent(new Event('resize'));
+        if (window.ResizeObserver) {
+          // Force ResizeObserver callbacks
+          const panelLeft = document.getElementById('panelLeft');
+          const panelRight = document.getElementById('panelRight');
+          if (panelLeft) {
+            const ro = new ResizeObserver(() => {});
+            ro.observe(panelLeft);
+            ro.disconnect();
+          }
+          if (panelRight) {
+            const ro = new ResizeObserver(() => {});
+            ro.observe(panelRight);
+            ro.disconnect();
+          }
+        }
+      }, 100);
+    });
+
+    function resetToConfigForm() {
+      // Hide finished message and reset button
+      let finishedElem = document.getElementById('examFinishedMsg');
+      if (finishedElem) finishedElem.style.display = 'none';
+      let resetBtn = document.getElementById('resetExamBtn');
+      if (resetBtn) resetBtn.style.display = 'none';
+      // Hide countdown, show form
+      hideCountdown();
+      // Reset right panel to form
+      const rightPanelContent = document.getElementById('rightPanelContent');
+      const formHtml = document.getElementById('assessmentForm');
+      if (formHtml) {
+        rightPanelContent.innerHTML = '';
+        rightPanelContent.appendChild(formHtml.closest('#formScaleContainer'));
+        setTimeout(scaleFormToPanel, 0);
+      } else {
+        // fallback: reload page
+        window.location.reload();
+      }
+      // Show left panel current time, hide right panel wall clock
+      const currentTimeWrapper = document.getElementById('currentTimeWrapper');
+      if (currentTimeWrapper) currentTimeWrapper.style.display = 'flex';
+      // Reset header title to "Exam Timer"
+      const headerTitle = document.querySelector('.header-title');
+      if (headerTitle) {
+        headerTitle.textContent = 'Exam Timer';
+      }
+      // (no wall clock in right panel)
+    }
+
+    function scaleFormToPanel() {
+      const panel = document.getElementById('panelRight');
+      const container = document.getElementById('formScaleContainer');
+      const form = document.getElementById('assessmentForm');
+      if (!panel || !container || !form) return;
+      const panelWidth = panel.offsetWidth;
+      const panelHeight = panel.offsetHeight;
+      const designWidth = 700; // px
+      const designHeight = 600; // px
+      let scaleX = Math.min(panelWidth * 0.8 / designWidth, 1); // scale down, never up
+      let scaleY = Math.min(panelHeight * 0.8 / designHeight, 1); // scale down, never up
+      let scale = Math.min(scaleX, scaleY); // use the smaller scale to fit both dimensions
+      form.style.transform = `scale(${scale})`;
+      form.style.transformOrigin = 'center center';
+    }
+    window.addEventListener('resize', scaleFormToPanel);
+    if (window.ResizeObserver) {
+      const panelRight = document.getElementById('panelRight');
+      const ro2 = new ResizeObserver(() => scaleFormToPanel());
+      ro2.observe(panelRight);
+    }
+    setTimeout(scaleFormToPanel, 0);
+
+    function scaleLeftPanelContents() {
+      const panel = document.getElementById('panelLeft');
+      const container = document.getElementById('leftScaleContainer');
+      if (!panel || !container) return;
+      const panelWidth = panel.offsetWidth;
+      const panelHeight = panel.offsetHeight;
+      
+      // Make design dimensions more responsive to panel size, with wider width for special markers
+      const designWidth = Math.max(600, Math.floor(panelWidth * 0.9));
+      const designHeight = Math.max(300, Math.floor(panelHeight * 0.85));
+      
+      container.style.width = designWidth + 'px';
+      container.style.height = designHeight + 'px';
+      
+      // Calculate scale to fit content within panel
+      let scaleX = Math.min(panelWidth * 0.95 / designWidth, 1);
+      let scaleY = Math.min(panelHeight * 0.9 / designHeight, 1);
+      let scale = Math.min(scaleX, scaleY);
+      
+      container.style.transform = `scale(${scale})`;
+      container.style.transformOrigin = 'top center';
+      panel.style.overflow = 'visible';
+    }
+    window.addEventListener('resize', scaleLeftPanelContents);
+    if (window.ResizeObserver) {
+      const panelLeft = document.getElementById('panelLeft');
+      const ro3 = new ResizeObserver(() => scaleLeftPanelContents());
+      ro3.observe(panelLeft);
+    }
+    setTimeout(scaleLeftPanelContents, 0);
+
+    // Add scaling logic for the wall clock grid
+    function scaleWallclockGridContainer() {
+      const panel = document.getElementById('panelRight');
+      const container = document.getElementById('wallclockScaleContainer');
+      const gridOuter = document.getElementById('wallclockGridOuter');
+      if (!panel || !container || !gridOuter) return;
+      const panelWidth = panel.offsetWidth;
+      const panelHeight = panel.offsetHeight;
+      const designWidth = 700;
+      const designHeight = 500;
+      let scaleX = Math.min(panelWidth * 0.95 / designWidth, 1); // scale down, never up
+      let scaleY = Math.min(panelHeight * 0.95 / designHeight, 1); // scale down, never up
+      let scale = Math.min(scaleX, scaleY); // use the smaller scale to fit both dimensions
+      gridOuter.style.transform = `scale(${scale})`;
+      gridOuter.style.transformOrigin = 'center center';
+    }
+    // Debounce utility
+    let wallclockGridResizeTimeout = null;
+    function debounceWallclockGridUpdate() {
+      if (wallclockGridResizeTimeout) clearTimeout(wallclockGridResizeTimeout);
+      wallclockGridResizeTimeout = setTimeout(() => {
+        if (lastWallclockParams) {
+          showWallclockIncrements(
+            lastWallclockParams.readingEnabled,
+            lastWallclockParams.readingTime,
+            lastWallclockParams.examTime,
+            lastWallclockParams.readingSkipped,
+            lastWallclockParams.examStartOverride,
+            lastWallclockParams.enableDoNotLeaveBefore,
+            lastWallclockParams.doNotLeaveBefore,
+            lastWallclockParams.enableDoNotLeaveAfter,
+            lastWallclockParams.doNotLeaveAfter
+          );
+        }
+      }, 100);
+    }
+    window.addEventListener('resize', debounceWallclockGridUpdate);
+    if (window.ResizeObserver) {
+      const panelRight = document.getElementById('panelRight');
+      const ro4 = new ResizeObserver(() => debounceWallclockGridUpdate());
+      ro4.observe(panelRight);
+    }
+  </script>
+</body>
+</html> 
