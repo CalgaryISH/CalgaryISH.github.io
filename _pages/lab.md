@@ -48,4 +48,7 @@ For a little peek into the kinds of things I'm interested in, you can take a loo
 - Satota Mandal (Mitacs Globalink Intern)
 - Henil Dudat (Mitacs Globalink Intern)
 - Omar Ahmed (UCalgary Summer Researcher)
-- Anubhave PRasad (Mitacs Globalink Intern)
+- Anubhav Prasad (Mitacs Globalink Intern)
+
+### Acknowledgements
+This research program is supported in part by the Natural Sciences and Engineering Research Council of Canada (NSERC) [RGPIN-2022-03027]. Cette recherche a ´et´e financ´ee en partie par le Conseil de recherches en sciences naturelles et en génie du Canada. Other support includes funding from Alberta Innovates and a gift from Intel Corporation. Some of our research has used tools provided by CMC Microsystems, manager of the FABrIC project funded by the Government of Canada. Some of our research was also facilitated by academic access provided by Verific. Some prior research work was supported by the NSF, SRC, and DARPA. 
