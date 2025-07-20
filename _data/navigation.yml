@@ -10,7 +10,7 @@
 main:
 
   - title: "Lab"
-    url: /lab/
+    url: /lab-page/
 
   - title: "Publications"
     url: /publications/
