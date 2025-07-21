@@ -1,5 +1,5 @@
 ---
-permalink: /lab
+permalink: /
 title: "CalgaryISH"
 author_profile: false
 redirect_from: 
