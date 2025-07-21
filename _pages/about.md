@@ -11,9 +11,6 @@ redirect_from:
 
 If you are an existing grad student, the link you are probably looking for is [here](https://schulich.ucalgary.ca/electrical-software/programs/graduate/program-resources).
 
-![alt text](/images/windridge.jpg)
-<p align="center">Access to the mountains is a great part of being in Calgary</p>
-
 His recent research efforts include projects in collaboration with Intel, and his work has been funded by the Natural Sciences and Engineering Research Council of Canada (NSERC), the NSF (USA), DARPA (USA), Alberta Innovates, and the Semiconductor Research Corporation (SRC). He earned his Ph.D. at the [University of Auckland](https://www.auckland.ac.nz/en/engineering/about-the-faculty/engineering/electrical-computer-and-software-engineering.html), New Zealand. At the University of Auckland, he worked as a Professional Teaching Fellow and received a Student’s Choice Top Teacher Award (Top 15 in the Faculty). Before that, he grew up in Auckland. To date, he has not been told who he is [assisting](https://en.wikipedia.org/wiki/Academic_ranks_in_Canada) to profess. 
 
 His current [research](https://scholar.google.com/citations?user=GOjr_RAAAAAJ) focuses on improving the security of computer systems at the hardware level and up. This also includes understanding the implications of emerging deep learning techniques, including Large Language Models (LLMs), on the digital system development flow and supply chain.
