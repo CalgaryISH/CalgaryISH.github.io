@@ -7,7 +7,7 @@ redirect_from:
   - lab-page.html
 ---
 
-The Calgary Intelligent Systems and Hardware (CalgaryISH) research group was started in 2019. Broadly speaking, our research group's interests include (but are not limited to):
+The Calgary Intelligent Systems and Hardware (CalgaryISH) research group was started in 2021. Broadly speaking, our research group's interests include (but are not limited to):
 - digital hardware design and electronic design automation (but largely before physical design)
 - hardware security
 - embedded systems
