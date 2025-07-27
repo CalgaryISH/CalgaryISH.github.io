@@ -15,6 +15,6 @@ His recent research efforts include projects in collaboration with Intel, and hi
 
 His current [research](https://scholar.google.com/citations?user=GOjr_RAAAAAJ) focuses on improving the security of computer systems at the hardware level and up. This also includes understanding the implications of emerging deep learning techniques, including Large Language Models (LLMs), on the digital system development flow and supply chain.
 
-His work has received a best paper award (ACM TODAES '25), distinguished paper award (IEEE S&P ‘22) and an outstanding paper award (IEEE TALE ‘18). He is currently an Associate Editor for ACM TODAES. In the past has served as a coordinator and adviser for competitions at CSAW (the most comprehensive student-run cybersecurity event in the world). 
+His work has received a [best paper award](https://dl.acm.org/doi/10.1145/3643681) (ACM TODAES '25), another [best paper award](http://doi.org/10.1109/LES.2023.3329417) (SeHAS'24), [distinguished paper award](https://dl.acm.org/doi/10.1145/3610721) (IEEE S&P ‘22) and an doi (IEEE TALE ‘18). He is currently an Associate Editor for ACM TODAES. In the past has served as a coordinator and adviser for competitions at CSAW (the most comprehensive student-run cybersecurity event in the world). 
 
-Dr. Tan is a Professional Member of the Association of Professional Engineers and Geoscientists of Alberta (APEGA). He is a Senior Member of IEEE and a member of ACM. 
+Dr. Tan is a Professional Member of the Association of Professional Engineers and Geoscientists of Alberta ([APEGA](https://www.apega.ca/members/member-directory?term=300558&page=1)). He is a Senior Member of IEEE and a member of ACM. 
