@@ -2,18 +2,42 @@
 permalink: /
 title: "CalgaryISH"
 author_profile: false
+layout: splash
+header:
+  overlay_color: "#5e616c"
+  overlay_image: /windridge.jpg
+#   actions:
+#     - label: "<i class='fas fa-download'></i> Install now"
+#       url: "/docs/quick-start-guide/"
+excerpt: >
+  The Calgary Intelligent Systems and Hardware Research Group<br />
+#   <small>led by Dr. Benjamin Tan</small>
+feature_row:
+  - image_path: /marvin-meyer-SYTO3xs06fU-unsplash.jpg
+    alt: "The Team"
+    title: "The Team"
+    excerpt: "The CalgaryISH research group was started in 2021, and our team comprises graduate and undergraduate-level researchers."
+    url: "/lab/"
+    btn_class: "btn--primary"
+    btn_label: "Learn more"
+  - image_path: /lorenzo-herrera-p0j-mE6mGo4-unsplash.jpg
+    alt: "Research"
+    title: "Our Research"
+    excerpt: "For a little peek into the kinds of things we're interested in, you can take a look at this [paper](https://arxiv.org/pdf/2409.05832), or [Ben's Google Scholar](https://scholar.google.com/citations?user=GOjr_RAAAAAJ) profile."
+    url: "/research/"
+    btn_class: "btn--primary"
+    btn_label: "Learn more"
+  - image_path: /BenjaminTan.jpg
+    alt: "Photo of Benjamin Tan"
+    title: "The PI"
+    excerpt: "Benjamin Tan is an Assistant Professor at the University of Calgary, Alberta, Canada."
+    url: "/PI/"
+    btn_class: "btn--primary"
+    btn_label: "Learn more"      
 ---
 
-The Calgary Intelligent Systems and Hardware (CalgaryISH) research group was started in 2021. Broadly speaking, our research group's interests include (but are not limited to):
-- digital hardware design and electronic design automation (but largely before physical design)
-- hardware security
-- embedded systems
-- large language models and their (un)helpfulness in software and hardware design
+{% include feature_row %}
 
-For a little peek into the kinds of things we're interested in, you can take a look at this [paper](https://arxiv.org/pdf/2409.05832)
-
-![alt text](/images/windridge.jpg)
-<p align="center">Access to the mountains is a great part of being in Calgary</p>
 
 
 ### Acknowledgements
