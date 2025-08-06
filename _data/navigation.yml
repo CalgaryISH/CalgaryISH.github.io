@@ -15,7 +15,7 @@ main:
     url: /lab-page/
 
   - title: "Research"
-    url: /research-page/
+    url: /research/
 
   - title: "Publications"
     url: /publications/

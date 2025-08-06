@@ -1,10 +1,10 @@
 ---
-permalink: /research
+permalink: /research/
 title: "Research"
 author_profile: false
-redirect_from: 
-  - /research-page/
-  - research-page.html
+# redirect_from: 
+#   - /research-page/
+#   - research-page.html
 ---
 
 ## Ongoing Projects
