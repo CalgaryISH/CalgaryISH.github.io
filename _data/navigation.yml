@@ -9,10 +9,10 @@
 
 main:
   - title: "PI"
-    url: /about/
+    url: /PI/
 
   - title: "Lab"
-    url: /lab-page/
+    url: /lab/
 
   - title: "Research"
     url: /research/
@@ -30,7 +30,7 @@ main:
     url: /year-archive/
 
   - title: "Misc"
-    url: /miscellaneous/
+    url: /misc/
 
 
     

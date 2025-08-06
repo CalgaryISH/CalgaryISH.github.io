@@ -1,10 +1,10 @@
 ---
-permalink: /lab
+permalink: /lab/
 title: "CalgaryISH"
 author_profile: false
-redirect_from: 
-  - /lab-page/
-  - lab-page.html
+# redirect_from: 
+#   - /lab-page/
+#   - lab-page.html
 ---
 
 The Calgary Intelligent Systems and Hardware (CalgaryISH) research group was started in 2021. Broadly speaking, our research group's interests include (but are not limited to):
