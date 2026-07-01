@@ -7,7 +7,7 @@ author_profile: true
 #   - /about.html
 ---
 
-[Dr. Benjamin Tan](https://profiles.ucalgary.ca/peng-seng-benjamin-tan) (he/him/his) is an Assistant Professor at the [University of Calgary](https://www.ucalgary.ca), Alberta, Canada. He leads the Calgary Intelligent Systems & Hardware Research Group (CalgaryISH). Before joining the University of Calgary, Dr. Tan was a Research Assistant Professor at [New York University](https://engineering.nyu.edu/academics/departments/electrical-and-computer-engineering) with the Center for Cybersecurity.  For the 2025-2026 academic year, he will serve as the Associate Head - Graduate Studies (Acting) for the [Department of Electrical and Software Engineering](https://schulich.ucalgary.ca/electrical-software). 
+[Dr. Benjamin Tan](https://profiles.ucalgary.ca/peng-seng-benjamin-tan) (he/him/his) is a tenured Associate Professor at the [University of Calgary](https://www.ucalgary.ca), Alberta, Canada. He leads the Calgary Intelligent Systems & Hardware Research Group (CalgaryISH). Before joining the University of Calgary, Dr. Tan was a Research Assistant Professor at [New York University](https://engineering.nyu.edu/academics/departments/electrical-and-computer-engineering) with the Center for Cybersecurity.  For the 2025-2026 academic year, he will serve as the Associate Head - Graduate Studies (Acting) for the [Department of Electrical and Software Engineering](https://schulich.ucalgary.ca/electrical-software). 
 
 If you are an existing grad student in our department at UCalgary, the link you are probably looking for is [here](https://schulich.ucalgary.ca/electrical-software/programs/graduate/program-resources).
 
