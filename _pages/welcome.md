@@ -30,7 +30,7 @@ feature_row:
   - image_path: /BenjaminTan.jpg
     alt: "Photo of Benjamin Tan"
     title: "The PI"
-    excerpt: "Benjamin Tan is an Assistant Professor at the University of Calgary, Alberta, Canada."
+    excerpt: "Benjamin Tan is an Associate Professor at the University of Calgary, Alberta, Canada."
     url: "/PI/"
     btn_class: "btn--primary"
     btn_label: "Learn more"      
