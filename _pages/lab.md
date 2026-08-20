@@ -25,7 +25,7 @@ For a little peek into the kinds of things I'm interested in, you can take a loo
 - Elahe Daei (Ph.D., with [ldklab](https://ldklab.github.io/), co-supervised by L. De Carli)
 - Reyhaneh Farahmand (M.Sc., with [ldklab](https://ldklab.github.io/), co-supervised by L. De Carli)
 - Yufan Feng (M.Sc., with [CalgaryML Lab](https://www.calgaryml.com/), main supervisor: Y. Ioannou)
-- Justin Ross (M.Sc., with [Calgary Sensor Lab](https://sensorlab.ca/), main supervisor: Z. Ababsi)
+- Justin Ross (M.Sc., with [Calgary Sensor Lab](https://sensorlab.ca/), main supervisor: Z. Abbasi)
 - Bryan Kwan (M.Sc. - incoming F'25)
 - Matthew Allwright (M.Sc. - incoming F'25)
 
